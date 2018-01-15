@@ -47,19 +47,23 @@ for index, category in enumerate(categories):
                 	break
                 else:
                 	textReq = textReq + str(tag)
+            if str(textReq).isspace():
+            	textReq = str(parsedDifinition.find("p"))
             beautifulText = str(soup(textReq, "html.parser").get_text())
-            withoutSpaces = beautifulText.replace(r","," ")
-            elemnts = withoutSpaces.splitlines()
-            term_difinition = ""
+            withoutCommas = beautifulText.replace(r","," ")
+            elemnts = withoutCommas.splitlines()
+            withoutSpaces = ""
             for elemnt in elemnts:
                 if elemnt != "":
-                    term_difinition = term_difinition + elemnt
+                    withoutSpaces = withoutSpaces + elemnt
+            term_difinition = withoutSpaces.lstrip()
             # print ("main_category_id", main_category_id)
             # 	print ("main_category_name", main_category_name)
             # 	print ("subCategory_id", subCategory_id)
             # 	print ("term_id", term_id)
             # 	print ("subCategory_name", subCategory_name)
             # 	print ("term_name", term_name)
-            # print ("term_difinition", term_difinition )
+            # print ("term_difinition: ", term_difinition )
             f.write(str(main_category_id) + "," + main_category_name + "," + str(subCategory_id) + "," +subCategory_name + "," + str(term_id) + "," + term_name + "," + term_difinition + "\n")
 f.close()
+
