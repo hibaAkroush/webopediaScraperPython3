@@ -27,13 +27,17 @@ term_difinition_list = []
 
 for index, category in enumerate(categories):
     main_category_id = index
+    print("main_category_id                                     ",main_category_id)
     main_category_name = str(category.div.span.a["href"])
+    print("main_category_name                                   ",main_category_name)
     subCategories1 = category.findAll("li",{"class":"listing-item"})
     subCategories2 = category.findAll("li",{"class":"listing-item-hidden"})
     subCategories = subCategories1 + subCategories2
     for indx , subCategory in enumerate(subCategories):
         subCategory_id = indx
+        print ("subCategory_id                                  ", subCategory_id)
         subCategory_name = 	str(subCategory.a.text)
+        print("subCategory_name                                 ",subCategory_name)
         sublink = str(subCategory.a["href"])
         link = "https://www.webopedia.com" + sublink
         terms_html = uReq(link).read()
@@ -44,19 +48,19 @@ for index, category in enumerate(categories):
         terms = terms1 + terms2
         for inx, term in enumerate(terms):
             term_id = inx
+            print("term_id                                             ", term_id)
             term_name = str(term.text)
+            print("term_name                                            "  ,term_name)
             definistionSubUrl = str(term.a["href"])
             definistionUrl = "https://www.webopedia.com" + definistionSubUrl
+            print ("definistionUrl                                      ", definistionUrl)
             difinition_html = uReq(definistionUrl).read()
             uReq(definistionUrl).close()
             parsedDifinition = soup(difinition_html,"html.parser")
-            difinition = parsedDifinition.find("div",{"class":"article_related_items"})
+            paragraphs = parsedDifinition.find_all('p')
             textReq = ""
-            for tag in difinition.next_siblings:
-                if tag.name == "p":
-                	break
-                else:
-                	textReq = textReq + str(tag)
+            for paragraph in paragraphs:
+                textReq = textReq + paragraph.text
             if str(textReq).isspace():
             	textReq = str(parsedDifinition.find("p"))
             beautifulText = str(soup(textReq, "html.parser").get_text())
@@ -74,14 +78,14 @@ for index, category in enumerate(categories):
             term_id_list.insert(len(term_id_list),term_id)
             term_name_list.insert(len(term_name_list),term_name)
             term_difinition_list.insert(len(term_difinition_list),term_difinition)
-            print ("main_category_id", main_category_id)
-            print ("main_category_name", main_category_name)
-            print ("subCategory_id", subCategory_id)
-            print ("term_id", term_id)
-            print ("subCategory_name", subCategory_name)
-            print ("term_name", term_name)
+            # print ("main_category_id", main_category_id)
+            # print ("main_category_name", main_category_name)
+            # print ("subCategory_id", subCategory_id)
+            # print ("term_id", term_id)
+            # print ("subCategory_name", subCategory_name)
+            # print ("term_name", term_name)
             print ("term_difinition: ", term_difinition )
-            print ("url: ", definistionUrl)
+            # print ("url: ", definistionUrl)
 raw_data = {
 	"main_category_id": main_category_id_list,
 	"main_category_name": main_category_name_list,
